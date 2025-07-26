@@ -3,22 +3,30 @@
     <div class="bg-white shadow-xl rounded-2xl p-6 w-full max-w-xl space-y-5">
       <h1 class="text-2xl font-bold text-center text-gray-800">Generate Endorsement Letter</h1>
 
-      <input v-model="names" placeholder="Names (comma-separated)" class="w-full px-4 py-2 border rounded-lg" />
-      <input v-model="mobile" placeholder="Mobile numbers (comma-separated)" class="w-full px-4 py-2 border rounded-lg" />
-      <input v-model="date" type="date" class="w-full px-4 py-2 border rounded-lg" />
-      <input v-model="time" placeholder="Time" class="w-full px-4 py-2 border rounded-lg" />
+      <input v-model="names" :disabled="loading" placeholder="Names (comma-separated)" class="w-full px-4 py-2 border rounded-lg" />
+      <input v-model="mobile" :disabled="loading" placeholder="Mobile numbers (comma-separated)" class="w-full px-4 py-2 border rounded-lg" />
+      <input v-model="date" type="date" :disabled="loading" class="w-full px-4 py-2 border rounded-lg" />
+      <input v-model="time" :disabled="loading" placeholder="Time" class="w-full px-4 py-2 border rounded-lg" />
 
-      <select v-model="location" class="w-full px-4 py-2 border rounded-lg">
+      <select v-model="location" :disabled="loading" class="w-full px-4 py-2 border rounded-lg">
         <option value="SOC 4">SOC 4 - Bustos</option>
         <option value="SOC 5">SOC 5 - Univation</option>
         <option value="SOC 6">SOC 6 - Meycauayan</option>
       </select>
 
-      <button @click="generateDocument" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Generate & Send</button>
+      <button
+        @click="generateDocument"
+        :disabled="loading"
+        :class="['w-full py-2 rounded-lg transition cursor-pointer', loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700']"
+      >
+        {{ loading ? 'Generating and sending email...' : 'Generate & Send' }}
+      </button>
+
       <p v-if="message" class="text-center text-green-600 font-medium mt-2">{{ message }}</p>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref } from 'vue'
@@ -44,7 +52,12 @@ function formatDate(input) {
   return new Date(input).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 }
 
+const loading = ref(false)
+
 async function generateDocument() {
+  loading.value = true
+  message.value = ''
+
   const response = await fetch('/templates/Template.docx')
   const content = await response.arrayBuffer()
   const zip = new PizZip(content)
@@ -55,7 +68,6 @@ async function generateDocument() {
   const formattedDate = formatDate(date.value)
 
   try {
-    // ✅ Only one call to render() with data
     doc.render({
       date: formattedDate,
       address: addresses[location.value],
@@ -63,7 +75,12 @@ async function generateDocument() {
     })
 
     const blob = doc.getZip().generate({ type: 'blob' })
-    saveAs(blob, `${formattedNames.split(',')[0]}_Letter.docx`)
+    const fileName = `${names.value
+      .split(',')
+      .map(name => name.trim())
+      .join(', ')}.docx`
+
+    saveAs(blob, fileName)
 
     const reader = new FileReader()
     reader.onload = async () => {
@@ -86,13 +103,16 @@ async function generateDocument() {
       time.value = ''
       location.value = 'SOC 4'
       message.value = 'File generated and email sent successfully!'
+      loading.value = false
     }
     reader.readAsDataURL(blob)
   } catch (error) {
     console.error('Document error:', error)
     message.value = 'Something went wrong. Please try again.'
+    loading.value = false
   }
 }
+
 
 </script>
 
