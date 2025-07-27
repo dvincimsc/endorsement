@@ -23,7 +23,7 @@ exports.handler = async (event) => {
     const bodyText = `Please be advised that the following individual/s are scheduled for shadowing on ${date} at ${time}\n\n${pairedList.join('\n')}`
 
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: `"D'Vinci MSC"`,
         to: ['jephthahlandicho1212@gmail.com', 'jephlandicho@gmail.com'],
         cc: ['analytics@dvincimsc.com', 'dvmscattendance@gmail.com'],
         subject: `D'Vinci Drivers Endorsement Letter ${date}`,
