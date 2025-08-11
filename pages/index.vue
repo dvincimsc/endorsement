@@ -44,7 +44,7 @@ const message = ref('')
 
 const addresses = {
   'SOC 4': 'Bustos Parking (temp parking, but assigned for SOC 4 trips) - NCT Transntional Corp (CY-Bulacan)',
-  'SOC 5': 'Univation Parking - Gate 2, Univation Motor Philippines, Inc. - Nissan Technopark, Pulong Santa Cruz, Santa Rosa, Laguna',
+  'SOC 5': 'Univation Parking - RLX Calamba 2A, Paciano Rizal, Calamba, Laguna',
   'SOC 6': 'SOC 6 Parking - North Distribution Center 2, Meycauayan, Bulacan'
 }
 
