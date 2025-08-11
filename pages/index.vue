@@ -43,7 +43,7 @@ const location = ref('SOC 4')
 const message = ref('')
 
 const addresses = {
-  'SOC 4': 'Bustos Parking (temp parking, but assigned for SOC 4 trips) - NCT Transntional Corp (CY-Bulacan)',
+  'SOC 4': 'Bustos Parking Balagtas, Plaridel Bypass Rd, Plaridel, Bulacan',
   'SOC 5': 'Univation Parking - RLX Calamba 2A, Paciano Rizal, Calamba, Laguna',
   'SOC 6': 'SOC 6 Parking - North Distribution Center 2, Meycauayan, Bulacan'
 }
