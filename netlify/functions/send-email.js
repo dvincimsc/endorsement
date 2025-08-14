@@ -24,8 +24,8 @@ exports.handler = async (event) => {
 
     const mailOptions = {
         from: `"D'Vinci MSC"`,
-        to: ['jephlandicho@gmail.com'],
-        cc: ['analytics@dvincimsc.com'],
+        to: ['denise.flores@spxexpress.com','earnest.pineda@spxexpress.com'],
+        cc: ['johncarlo.saldana@spxexpress.com','jessica.gamboa@spxexpress.com','joyce.basibas@spxexpress.com', 'jayson.montemayor@spxexpress.com','ivan.arcega@spxexpress.com','jeric.reyes@spxexpress.com','mickeypgonzaga@gmail.com','fleetops@dvincimsc.com'],
         subject: `D'Vinci Drivers Endorsement Letter ${date}`,
         text: bodyText,
         attachments: [
