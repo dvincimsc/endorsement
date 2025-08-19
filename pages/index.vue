@@ -12,6 +12,7 @@
         <option value="SOC 4">SOC 4 - Bustos</option>
         <option value="SOC 5">SOC 5 - Univation</option>
         <option value="SOC 6">SOC 6 - Meycauayan</option>
+        <option value="SOC 6">SOC 8 - Calamba</option>
       </select>
 
       <button
@@ -45,7 +46,8 @@ const message = ref('')
 const addresses = {
   'SOC 4': 'Bustos Parking Balagtas, Plaridel Bypass Rd, Plaridel, Bulacan',
   'SOC 5': 'Univation Parking - RLX Calamba 2A, Paciano Rizal, Calamba, Laguna',
-  'SOC 6': 'SOC 6 Parking - North Distribution Center 2, Meycauayan, Bulacan'
+  'SOC 6': 'SOC 6 Parking - North Distribution Center 2, Meycauayan, Bulacan',
+  'SOC 8': 'SOC 8 Silangan, Calamba - Sitio Latian, Mapagong Road, Canlubang, Calamba Laguna'
 }
 
 function formatDate(input) {
