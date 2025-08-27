@@ -12,7 +12,7 @@
         <option value="SOC 4">SOC 4 - Bustos</option>
         <option value="SOC 5">SOC 5 - Univation</option>
         <option value="SOC 6">SOC 6 - Meycauayan</option>
-        <option value="SOC 6">SOC 8 - Calamba</option>
+        <option value="SOC 8">SOC 8 - Calamba</option>
       </select>
 
       <button
