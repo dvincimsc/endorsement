@@ -10,7 +10,6 @@
 
       <select v-model="location" :disabled="loading" class="w-full px-4 py-2 border rounded-lg">
         <option value="SOC 4">SOC 4 - Bustos</option>
-        <option value="SOC 5">SOC 5 - Univation</option>
         <option value="SOC 6">SOC 6 - Meycauayan</option>
         <option value="SOC 8">SOC 8 - Calamba</option>
       </select>
@@ -20,7 +19,7 @@
         :disabled="loading"
         :class="['w-full py-2 rounded-lg transition cursor-pointer', loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700']"
       >
-        {{ loading ? 'Generating and sending email...' : 'Generate & Send' }}
+        {{ loading ? 'Generating...' : 'Generate' }}
       </button>
 
       <p v-if="message" class="text-center text-green-600 font-medium mt-2">{{ message }}</p>
@@ -28,12 +27,10 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref } from 'vue'
 import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
-import { saveAs } from 'file-saver'
 
 const names = ref('')
 const mobile = ref('')
@@ -42,10 +39,10 @@ const time = ref('')
 const location = ref('SOC 4')
 
 const message = ref('')
+const loading = ref(false)
 
 const addresses = {
   'SOC 4': 'Bustos Parking Balagtas, Plaridel Bypass Rd, Plaridel, Bulacan',
-  'SOC 5': 'Univation Parking - RLX Calamba 2A, Paciano Rizal, Calamba, Laguna',
   'SOC 6': 'SOC 6 Parking - North Distribution Center 2, Meycauayan, Bulacan',
   'SOC 8': 'SOC 8 Silangan, Calamba - Sitio Latian, Mapagong Road, Canlubang, Calamba Laguna'
 }
@@ -54,11 +51,11 @@ function formatDate(input) {
   return new Date(input).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 }
 
-const loading = ref(false)
-
 async function generateDocument() {
   loading.value = true
   message.value = ''
+
+  const { saveAs } = await import('file-saver') // ✅ SSR safe
 
   const response = await fetch('/templates/Template.docx')
   const content = await response.arrayBuffer()
@@ -66,7 +63,6 @@ async function generateDocument() {
   const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true })
 
   const formattedNames = names.value.split(',').map(n => n.trim()).join(', ')
-  const formattedMobiles = mobile.value.split(',').map(m => m.trim()).join(', ')
   const formattedDate = formatDate(date.value)
 
   try {
@@ -77,44 +73,22 @@ async function generateDocument() {
     })
 
     const blob = doc.getZip().generate({ type: 'blob' })
-    const fileName = `${names.value
-      .split(',')
-      .map(name => name.trim())
-      .join(', ')}.docx`
-
+    const fileName = `${formattedNames}.docx`
     saveAs(blob, fileName)
 
-    const reader = new FileReader()
-    reader.onload = async () => {
-      const base64File = reader.result.split(',')[1]
-      await fetch('/.netlify/functions/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          names: formattedNames,
-          mobile: formattedMobiles,
-          date: formattedDate,
-          time: time.value,
-          fileBase64: base64File
-        })
-      })
+    // reset fields
+    names.value = ''
+    mobile.value = ''
+    date.value = ''
+    time.value = ''
+    location.value = 'SOC 4'
 
-      names.value = ''
-      mobile.value = ''
-      date.value = ''
-      time.value = ''
-      location.value = 'SOC 4'
-      message.value = 'File generated and email sent successfully!'
-      loading.value = false
-    }
-    reader.readAsDataURL(blob)
+    message.value = 'File generated successfully!'
   } catch (error) {
     console.error('Document error:', error)
     message.value = 'Something went wrong. Please try again.'
-    loading.value = false
   }
+
+  loading.value = false
 }
-
-
 </script>
-
