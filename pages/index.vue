@@ -4,7 +4,6 @@
       <h1 class="text-2xl font-bold text-center text-gray-800">Generate Endorsement Letter</h1>
 
       <input v-model="names" :disabled="loading" placeholder="Names (comma-separated)" class="w-full px-4 py-2 border rounded-lg" />
-      <input v-model="mobile" :disabled="loading" placeholder="Mobile numbers (comma-separated)" class="w-full px-4 py-2 border rounded-lg" />
       <input v-model="date" type="date" :disabled="loading" class="w-full px-4 py-2 border rounded-lg" />
       <input v-model="time" :disabled="loading" placeholder="Time" class="w-full px-4 py-2 border rounded-lg" />
 
@@ -55,7 +54,7 @@ async function generateDocument() {
   loading.value = true
   message.value = ''
 
-  const { saveAs } = await import('file-saver') // ✅ SSR safe
+  const { saveAs } = await import('file-saver')
 
   const response = await fetch('/templates/Template.docx')
   const content = await response.arrayBuffer()
