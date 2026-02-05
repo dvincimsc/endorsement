@@ -4,7 +4,7 @@
       <h1 class="text-2xl font-bold text-center text-gray-800">Generate Endorsement Letter</h1>
 
       <input v-model="names" :disabled="loading" placeholder="Names (comma-separated)" class="w-full px-4 py-2 border rounded-lg" />
-      <input v-model="date" type="date" :disabled="loading" class="w-full px-4 py-2 border rounded-lg" />
+      <input v-model="mobile" :disabled="loading" placeholder="Mobile numbers (comma-separated)" class="w-full px-4 py-2 border rounded-lg" />
       <input v-model="time" :disabled="loading" placeholder="Time" class="w-full px-4 py-2 border rounded-lg" />
 
       <select v-model="location" :disabled="loading" class="w-full px-4 py-2 border rounded-lg">
@@ -42,6 +42,7 @@ const loading = ref(false)
 
 const addresses = {
   'SOC 4': 'Bustos Parking Balagtas, Plaridel Bypass Rd, Plaridel, Bulacan',
+  'SOC 5': 'Univation Parking - Gate 2, Univation Motor Philippines, Inc. - Nissan Technopark, Pulong  Santa Cruz, Santa Rosa, Laguna',
   'SOC 6': 'SOC 6 Parking - North Distribution Center 2, Meycauayan, Bulacan',
   'SOC 8': 'SOC 8 Silangan, Calamba - Sitio Latian, Mapagong Road, Canlubang, Calamba Laguna'
 }
